@@ -9,6 +9,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/vidservice/video")
@@ -30,9 +32,18 @@ public class VideoAdminController {
     }
 
     @ApiOperation(value="删除阿里云视频")
-    @DeleteMapping("deleteVideo/{id}")
-    public R deleteVideo(@PathVariable String id){
-        videoAdminService.deleteVideo(id);
+    @DeleteMapping("deleteVideo/{videoId}")
+    public R deleteVideo(@PathVariable String videoId) {
+        videoAdminService.deleteVideo(videoId);
         return R.ok().message("删除成功");
+    }
+
+    //删除阿里云多个视频
+    //参数是多个视频id的list集合
+    @ApiOperation(value = "删除多个阿里云视频")
+    @DeleteMapping("deleteMoreVideo")
+    public R deleteMoreVideo(@RequestParam("videoList") List videoList) {
+        videoAdminService.deleteMoreVideo(videoList);
+        return R.ok();
     }
 }

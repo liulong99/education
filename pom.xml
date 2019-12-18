@@ -6,7 +6,6 @@
         <module>xueyuan_eduservice</module>
         <module>xueyuan_common</module>
         <module>xueyuan_vidservice</module>
-        <module>edu_ekservice</module>
         <module>xueyuan_ekservice</module>
         <module>xueyuan_ucservice</module>
         <module>xueyuan_staservice</module>
@@ -98,6 +97,14 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>${swagger.version}</version>
+            </dependency>
+            <!--Spring Cloud-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Finchley.SR2</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

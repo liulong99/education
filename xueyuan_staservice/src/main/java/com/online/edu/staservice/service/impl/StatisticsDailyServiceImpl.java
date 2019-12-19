@@ -10,6 +10,11 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  * 网站统计日数据 服务实现类
@@ -51,5 +56,46 @@ public class StatisticsDailyServiceImpl extends ServiceImpl<StatisticsDailyMappe
 
         //添加到统计表中
         baseMapper.insert(statisticsDaily);
+    }
+
+    //显示图表的方法
+    @Override
+    public Map<String, Object> showChart(String begin, String end, String type) {
+        QueryWrapper<StatisticsDaily> wrapper=new QueryWrapper<>();
+        wrapper.orderByAsc("date_calculated");
+        wrapper.select("date_calculated",type);
+        wrapper.between("date_calculated",begin,end);
+        List<StatisticsDaily> statisticsDailies = baseMapper.selectList(wrapper);
+
+        //时间集合
+        List<String>timeList=new ArrayList<>();
+        //数据集合
+        List<Integer>dataList=new ArrayList<>();
+        for(int i=0;i<statisticsDailies.size();i++){
+            //得到每个daily对象
+            StatisticsDaily daily=statisticsDailies.get(i);
+            //取时间集合
+            timeList.add(daily.getDateCalculated());
+            switch (type){
+                case "login_num":
+                    dataList.add(daily.getLoginNum());
+                    break;
+                case "register_num":
+                    dataList.add(daily.getRegisterNum());
+                    break;
+                case "video_view_num":
+                    dataList.add(daily.getVideoViewNum());
+                    break;
+                case "course_num":
+                    dataList.add(daily.getCourseNum());
+                    break;
+                default:break;
+            }
+        }
+        //最后将两个lis放进map中
+        Map<String,Object>map=new HashMap<>();
+        map.put("timeList",timeList);
+        map.put("dataList",dataList);
+        return map;
     }
 }

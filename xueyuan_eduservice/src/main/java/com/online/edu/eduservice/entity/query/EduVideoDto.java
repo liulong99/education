@@ -18,6 +18,9 @@ public class EduVideoDto implements Serializable {
     @ApiModelProperty(value = "小节名称")
     private String title;
 
+    @ApiModelProperty(value = "视频id")
+    private String videoSourceId;
+
     @ApiModelProperty(value = "云服务器上存储的视频文件名称")
     private String videoOriginalName;
 }

@@ -2,16 +2,20 @@ package com.online.edu.eduservice.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.online.edu.eduservice.entity.EduCourse;
 import com.online.edu.eduservice.entity.EduTeacher;
 import com.online.edu.eduservice.entity.query.QueryTeacher;
-import com.online.edu.eduservice.handler.EduException;
 import com.online.edu.eduservice.mapper.EduTeacherMapper;
+import com.online.edu.eduservice.service.EduCourseService;
 import com.online.edu.eduservice.service.EduTeacherService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -23,6 +27,9 @@ import java.util.List;
  */
 @Service
 public class EduTeacherServiceImpl extends ServiceImpl<EduTeacherMapper, EduTeacher> implements EduTeacherService {
+
+    @Autowired
+    private EduCourseService eduCourseService;
 
     //条件查询带分页
     @Override
@@ -71,5 +78,41 @@ public class EduTeacherServiceImpl extends ServiceImpl<EduTeacherMapper, EduTeac
         int i = baseMapper.deleteById(id);
         return i>0;
     }
+
+    //根据讲师id查询其所讲的全部课程
+    @Override
+    public List<EduCourse> getCourseByTeacherId(String id) {
+        QueryWrapper<EduCourse>wrapper=new QueryWrapper<>();
+        wrapper.eq("teacher_id",id);
+        List<EduCourse> list = eduCourseService.list(wrapper);
+        return list;
+    }
+
+    //前台分页查询的方法
+    @Override
+    public Map<String, Object> getFrontTeacherListPage(Page<EduTeacher> pageTeacher) {
+        //调用方法分页查询，用过pageTeacher对象获取分页之后的数据
+        baseMapper.selectPage(pageTeacher,null);
+        //从pageTeacher分页数据中获取出来数据放到map中
+        List<EduTeacher> records = pageTeacher.getRecords();//每页的数据
+        long total = pageTeacher.getTotal();//总记录数
+        long size = pageTeacher.getSize();//每页显示的记录数
+        long current=pageTeacher.getCurrent();//当前页
+        long pages = pageTeacher.getPages();//总页数
+        boolean hasNext = pageTeacher.hasNext();//是否有下一页
+        boolean hasPrevious = pageTeacher.hasPrevious();//是否有前一页
+
+        //把分页数据放到map集合中
+        Map<String,Object>map=new HashMap<>();
+        map.put("items",records);
+        map.put("current",current);
+        map.put("pages",pages);
+        map.put("size",size);
+        map.put("total",total);
+        map.put("hasNext",hasNext);
+        map.put("hasPrevious",hasPrevious);
+        return map;
+    }
+
 
 }

@@ -46,4 +46,17 @@ public class VideoAdminController {
         videoAdminService.deleteMoreVideo(videoList);
         return R.ok();
     }
+
+    //根据视频id获取播放凭证
+    @ApiOperation(value="根据视频id获取播放凭证")
+    @GetMapping("getPalyAuth/{vid}")
+    public R getPalyAuth(@PathVariable String vid){
+        String playAuth=videoAdminService.getPalyAuth(vid);
+        if(!StringUtils.isEmpty(playAuth)){
+            return R.ok().data("playAuth",playAuth);
+        }else{
+            return R.error();
+        }
+
+    }
 }

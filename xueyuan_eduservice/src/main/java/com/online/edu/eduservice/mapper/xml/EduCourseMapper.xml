@@ -3,12 +3,26 @@
 <mapper namespace="com.online.edu.eduservice.mapper.EduCourseMapper">
 
     <select id="getAllCourseInfo" resultType="com.online.edu.eduservice.entity.query.EduAllCourseDto">
-select c.id,c.title,c.cover,c.lesson_num AS lessonNum,CONVERT(c.price, DECIMAL(8,2)) AS price,t.name,cd.description,s1.title levelOne,s2.title levelTwo
-                  from edu_course c left outer join edu_course_description cd on c.id=cd.id
-									left outer join edu_teacher t on c.teacher_id=t.id
-									left outer join edu_subject s2 on c.subject_id=s2.id
-									left outer join edu_subject s1 on c.subject_parent_id=s1.id
-                  where c.id=#{id};
+        select c.id,c.title,c.cover,c.lesson_num AS lessonNum,CONVERT(c.price, DECIMAL(8,2)) AS price,t.name,cd.description,s1.title levelOne,s2.title levelTwo
+                          from edu_course c left outer join edu_course_description cd on c.id=cd.id
+                                            left outer join edu_teacher t on c.teacher_id=t.id
+                                            left outer join edu_subject s2 on c.subject_id=s2.id
+                                            left outer join edu_subject s1 on c.subject_parent_id=s1.id
+                          where c.id=#{id};
+    </select>
+
+    <select id="getTeacherAllInfo" resultType="com.online.edu.eduservice.entity.query.TeacherAllInfoDto">
+        select c.id,c.title,c.price,c.cover,c.lesson_num,c.buy_count,c.view_count,
+        cd.description,
+        t.name as teacherName,t.id as teacherId,t.intro,t.avatar,
+        s1.id as subjectLevelOneId,s1.title as subjectLevelOne,
+        s2.id as subjectLevelTwoId,s2.title as subjectLevelTwo
+        from
+        edu_course c left outer join edu_course_description cd on c.id=cd.id
+                     left outer join edu_teacher t on c.teacher_id=t.id
+                                 left outer join edu_subject s1 on c.subject_parent_id=s1.id
+                                 left outer join edu_subject s2 on c.subject_id=s2.id
+        where c.id=#{id}
     </select>
 
 </mapper>

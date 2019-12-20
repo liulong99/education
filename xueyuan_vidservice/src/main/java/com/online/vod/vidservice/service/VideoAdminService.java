@@ -12,4 +12,5 @@ public interface VideoAdminService {
 
     void deleteMoreVideo(List videoList);
 
+    String getPalyAuth(String vid);
 }

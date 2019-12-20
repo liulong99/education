@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.online.edu.eduservice.entity.form.CourseInfoForm;
 import com.online.edu.eduservice.entity.query.EduAllCourseDto;
 import com.online.edu.eduservice.entity.query.QueryCourse;
+import com.online.edu.eduservice.entity.query.TeacherAllInfoDto;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -16,6 +19,9 @@ import com.online.edu.eduservice.entity.query.QueryCourse;
  * @since 2019-12-09
  */
 public interface EduCourseService extends IService<EduCourse> {
+
+    //前台根据课程id查询课程详情
+    TeacherAllInfoDto getTeacherAllInfo(String id);
 
     String saveCourseInfo(CourseInfoForm courseInfoForm);
 
@@ -28,4 +34,6 @@ public interface EduCourseService extends IService<EduCourse> {
     boolean deleteCourseById(String id);
 
     EduAllCourseDto getAllCourseInfo(String id);
+
+    Map<String, Object> getCourseListPage(Page<EduCourse> eduCoursePage);
 }

@@ -9,6 +9,7 @@ import com.online.edu.eduservice.entity.EduCourseDescription;
 import com.online.edu.eduservice.entity.form.CourseInfoForm;
 import com.online.edu.eduservice.entity.query.EduAllCourseDto;
 import com.online.edu.eduservice.entity.query.QueryCourse;
+import com.online.edu.eduservice.entity.query.TeacherAllInfoDto;
 import com.online.edu.eduservice.handler.EduException;
 import com.online.edu.eduservice.mapper.EduCourseMapper;
 import com.online.edu.eduservice.service.EduChapterService;
@@ -22,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -42,6 +46,12 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
 
     @Autowired
     private EduVideoService eduVideoService;
+
+    //前台根据课程id查询课程详情
+    @Override
+    public TeacherAllInfoDto getTeacherAllInfo(String id) {
+        return baseMapper.getTeacherAllInfo(id);
+    }
 
     //新增课程
     @Transactional
@@ -150,6 +160,30 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
     public EduAllCourseDto getAllCourseInfo(String id) {
         EduAllCourseDto allCourseInfo = baseMapper.getAllCourseInfo(id);
         return allCourseInfo;
+    }
+
+    //前端分页查询课程列表
+    @Override
+    public Map<String, Object> getCourseListPage(Page<EduCourse> eduCoursePage) {
+        baseMapper.selectPage(eduCoursePage,null);
+        List<EduCourse> records=eduCoursePage.getRecords();//每页的数据
+        long current = eduCoursePage.getCurrent();//当前页
+        long pages = eduCoursePage.getPages();//总页数
+        long total = eduCoursePage.getTotal();//总记录数
+        long size = eduCoursePage.getSize();//每页显示的记录数
+        boolean hasPrevious = eduCoursePage.hasPrevious();//是否有前一页
+        boolean hasNext = eduCoursePage.hasNext();//是否有后一页
+
+        //把分页的数据放到map中
+        Map<String,Object>map=new HashMap<>();
+        map.put("items",records);
+        map.put("current",current);
+        map.put("pages",pages);
+        map.put("size",size);
+        map.put("total",total);
+        map.put("hasPrevious",hasPrevious);
+        map.put("hasNext",hasNext);
+        return map;
     }
 
 

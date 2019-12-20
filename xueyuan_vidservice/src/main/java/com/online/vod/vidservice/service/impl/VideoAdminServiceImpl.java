@@ -6,6 +6,8 @@ import com.aliyun.vod.upload.resp.UploadStreamResponse;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.vod.model.v20170321.DeleteVideoRequest;
 import com.aliyuncs.vod.model.v20170321.DeleteVideoResponse;
+import com.aliyuncs.vod.model.v20170321.GetVideoPlayAuthRequest;
+import com.aliyuncs.vod.model.v20170321.GetVideoPlayAuthResponse;
 import com.online.vod.vidservice.service.VideoAdminService;
 import com.online.vod.vidservice.utils.AliyunVodSDKUtils;
 import com.online.vod.vidservice.utils.ConstantPropertiesUtil;
@@ -78,6 +80,30 @@ public class VideoAdminServiceImpl implements VideoAdminService {
         }catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    //根据视频id获取播放凭证
+    @Override
+    public String getPalyAuth(String vid) {
+        String playAuth=null;
+        try {
+            //初始化客户端、请求对象和相应对象
+            DefaultAcsClient client = AliyunVodSDKUtils.initVodClient(ConstantPropertiesUtil.KEY_ID,
+                    ConstantPropertiesUtil.KEY_SECRET);
+            GetVideoPlayAuthRequest request = new GetVideoPlayAuthRequest();
+            GetVideoPlayAuthResponse response = new GetVideoPlayAuthResponse();
+            //设置请求参数
+            request.setVideoId(vid);
+            //获取请求响应
+            response = client.getAcsResponse(request);
+
+            //输出请求结果
+            //播放凭证
+            playAuth = response.getPlayAuth();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return playAuth;
     }
 
 }

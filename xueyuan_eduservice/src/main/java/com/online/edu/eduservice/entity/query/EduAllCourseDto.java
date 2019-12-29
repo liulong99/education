@@ -26,6 +26,12 @@ public class EduAllCourseDto implements Serializable {
     @ApiModelProperty(value = "课程价格")
     private String price;
 
+    @ApiModelProperty(value = "购买数")
+    private String buyCount;
+
+    @ApiModelProperty(value = "观看数")
+    private String viewCount;
+
     @ApiModelProperty(value="课程描述")
     private String description;
 

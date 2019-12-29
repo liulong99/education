@@ -6,4 +6,5 @@ import lombok.Data;
 public class SubjectVo {
     private String id;
     private String title;
+    private String videoSourceId;
 }

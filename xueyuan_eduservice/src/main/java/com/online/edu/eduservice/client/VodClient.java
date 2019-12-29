@@ -4,6 +4,7 @@ import com.online.edu.common.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,4 +21,9 @@ public interface VodClient {
     //定义调用删除多个视频的方法
     @DeleteMapping("/vidservice/video/deleteMoreVideo")
     public R deleteMoreVideo(@RequestParam("videoList") List videoList);
+
+    //获取播放凭证
+    @GetMapping("getPalyAuth/{vid}")
+    public R getPalyAuth(@PathVariable("vid") String vid);
+
 }
